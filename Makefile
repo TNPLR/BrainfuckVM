@@ -6,4 +6,4 @@ all: main.o
 main.o:
 	${CC} ${CFLAG} main.c -o main.o
 clean:
-	rm -f *.o
+	rm -f *.o bvm
