@@ -24,7 +24,9 @@ void vm(FILE *fPtr) {
   int mem_length = 1024;
   int while_loop_length = 16;
   int *memory = calloc(mem_length, sizeof(int));
-  long *while_mem = malloc(while_loop_length * sizeof(long));
+  long while_mem = 0;
+  int *while_ptr;
+  int jmp = 0;
   int while_nested = 0;
   if (!memory) {
     printf("FATAL: Cannot alloc memory.\n");
@@ -33,17 +35,9 @@ void vm(FILE *fPtr) {
   int mem_pos = 0;
   int while_loop_start = -1;
   while ((c = fgetc(fPtr)) != EOF) {
-/*
-    if (jmp == 1 && c = ']') {
-      jmp = 0;
-      --while_nested;
-      --while_mem;
-      if (memory[mem_pos]){
-        fseek(fPtr, *while_mem, SEEK_SET);
-        ++while_mem;
-      }
+    if (jmp == 1 && c != ']') {
+      continue;
     }
-*/
     switch (c) {
       case '+':
         ++(memory[mem_pos]);
@@ -71,6 +65,20 @@ void vm(FILE *fPtr) {
         break;
       case ',':
         memory[mem_pos] = getchar();
+        break;
+      case '[':
+        while_ptr = memory + mem_pos;
+        while_mem = ftell(fPtr);
+        if (!while_ptr) {
+          jmp = 1;
+        }
+        break;
+      case ']':
+        if (!(*while_ptr)) {
+          jmp = 0;
+        } else {
+          fseek(fPtr, while_mem, SEEK_SET);
+        }
         break;
 /*
       case '[':
