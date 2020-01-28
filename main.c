@@ -58,7 +58,7 @@ void vm(FILE *fPtr) {
 			++mem_pos;
 			if (mem_pos >= (mem_length - 1)) {
 				mem_length += 1024;
-				memory = realloc(memory, sizeof(int) * mem_length);
+				memory = realloc(memory, sizeof(unsigned char) * mem_length);
 			}
 			break;
 		case '<':
